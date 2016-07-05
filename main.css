@@ -1,0 +1,36 @@
+body {
+  background-color: #3b3a35;
+  color: #fff;
+}
+.p1 {
+  color: #20457c !important;
+}
+.p2 {
+  color: #fb6648 !important;
+}
+.p3 {
+  color: #5e3448 !important;
+}
+.p4 {
+  color: #ecdfbd !important;
+}
+#add_button {
+  top: -2em;
+  background-color: #fb6648;
+}
+.summary {
+  font-size: 16px !important;
+}
+#assume_value {
+  width: 3em;
+  color: #ff0;
+  height: auto;
+}
+.breakdown {
+  text-align: center;
+}
+.breakdown table {
+  border: 1px solid #fff;
+  width: 90%;
+  margin: 0 auto;
+}

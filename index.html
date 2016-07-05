@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grade Companion - Your Grades Displayed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+    <link rel="stylesheet" href="main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app" class="wrapper">
+      <div class="container stage">
+        <h3 class="center p2">Your Grades at a Glance</h3>
+      </div>
+      <div class="container inGrades">
+        <div v-for="i in items" class="row animated fadeIn">
+          <div class="input-field col s8"><a @click="removeComponent(i)" href="#" class="prefix"><i class="material-icons blue-text">cancel</i></a>
+            <input id="item_name" placeholder="{{i.placeholder}}" type="text" v-model="i.name" class="validate">
+            <label for="item_name" class="active">Component</label>
+          </div>
+          <div class="input-field col s2">
+            <input id="item_weight" placeholder="" v-model="i.weight" @input="calcGrade" type="text" class="weights validate">
+            <label for="item_weight" data-position="top" data-tooltip="How much this is worth." class="tooltipped active">Weight (%)</label>
+          </div>
+          <div class="input-field col s2">
+            <input id="item_grade" placeholder="" v-model="i.grade" @input="calcGrade" type="text" class="grades validate">
+            <label for="item_grade" data-position="top" data-tooltip="What your mark was." class="tooltipped active">Grade (%)</label>
+          </div>
+        </div>
+      </div>
+      <div class="section"></div>
+      <div class="divider"></div>
+      <div class="container center"><a id="add_button" data-position="right" data-delay="300" data-tooltip="Add more grade components." @click="addComponent" class="btn-floating btn-large waves-effect waves-light tooltipped"><i class="material-icons">add</i></a></div>
+      <div class="container summary">
+        <div class="row center">
+          <div class="col s6">
+            <div class="p2"><span v-if="remainingWeight != 0" class="white-text">* </span><span>Total Grade: </span>
+              <h6 v-if="remainingWeight != 0"> <span class="white-text"> *  </span><span><i>Assuming 0% on remaining</i></span></h6>
+            </div>
+          </div>
+          <div class="col s6">
+            <div class="blue-text">{{{ total | gpaScale }}}</div>
+          </div>
+        </div>
+        <div class="row center">
+          <div class="col s6">
+            <div class="p2">Remaining Percentage:</div>
+          </div>
+          <div class="col s6">
+            <div class="blue-text">{{remainingWeight}}%</div>
+          </div>
+        </div>
+        <div class="wrapper row">
+          <div class="divider"></div>
+          <div class="section"></div>
+          <div class="col s12 m6 center">
+            <div class="p4">Assuming... 
+              <input id="assume_value" v-model="assumedInput" placeholder="100%" type="text" @input="calcAssumed" class="center"><span style="margin-left:.5em;">...on remaining grade.</span>
+            </div>
+          </div>
+          <div class="col s12 m6 center">
+            <div class="p2">Projected Grade:<span class="yellow-text"> {{{assumedGrade | gpaScale }}}</span></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="section"></div>
+        <div class="wrapper center">
+          <div class="p2">
+            <h5>Detailed Breakdown</h5>
+          </div>
+          <div class="section"></div>
+          <div class="breakdown">
+            <table class="centered">
+              <thead>
+                <tr>
+                  <th>Recieving</th>
+                  <th>Grade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="val in breakdown">
+                  <td><span>Recieving </span><b>{{val}}% </b><span>on remaining </span><b>{{remainingWeight}}%:</b></td>
+                  <td><b>{{{calcBreakdown(val) | gpaScale}}}</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="section"></div>
+      </div>
+      <div class="divider"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.13/vue.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

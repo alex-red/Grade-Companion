@@ -1,0 +1,105 @@
+doctype html
+html
+  head
+    title Grade Companion - Your Grades Displayed
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css")
+    link(rel="stylesheet" href="main.css")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+            
+  body
+    .wrapper#app
+      .container.stage
+        h3.center.p2 Your Grades at a Glance
+      .container.inGrades
+        .row(v-for="i in items").animated.fadeIn
+          .input-field.col.s8
+            a(@click="removeComponent(i)" href="#").prefix: i.material-icons.blue-text cancel
+            input#item_name(placeholder="{{i.placeholder}}" type="text" v-model="i.name").validate
+            label(for="item_name").active Component
+          .input-field.col.s2
+            input#item_weight(placeholder="" v-model="i.weight" @input="calcGrade" type="text").weights.validate
+            label(for="item_weight" data-position="top" data-tooltip="How much this is worth.").tooltipped.active Weight (%)
+          .input-field.col.s2
+            input#item_grade(placeholder="" v-model="i.grade" @input="calcGrade" type="text").grades.validate
+            label(for="item_grade"  data-position="top" data-tooltip="What your mark was.").tooltipped.active Grade (%)
+
+      //- h4.center {{course.name}} {{course.grades}} {{course.total}}
+
+      .section
+      .divider
+      .container.center
+        a#add_button.btn-floating.btn-large.waves-effect.waves-light.tooltipped(data-position="right" data-delay="300" data-tooltip="Add more grade components." @click="addComponent"): i.material-icons add
+
+      .container.summary
+        .row.center
+          .col.s6
+            .p2
+              span.white-text(v-if="remainingWeight != 0") * 
+              span Total Grade: 
+              h6(v-if="remainingWeight != 0") 
+                span.white-text  *  
+                span: i Assuming 0% on remaining
+          .col.s6
+            .blue-text {{{ total | gpaScale }}}
+        .row.center
+          .col.s6
+            .p2 Remaining Percentage:
+          .col.s6
+            .blue-text {{remainingWeight}}%
+        .wrapper.row
+          //- (v-show="remainingWeight != 0")
+          .divider
+          .section
+          .col.s12.m6.center
+            .p4 Assuming... 
+              input#assume_value.center(v-model="assumedInput" placeholder="100%" type="text" @input="calcAssumed")
+              span(style="margin-left:.5em;") ...on remaining grade.
+          .col.s12.m6.center
+            .p2 Projected Grade:
+              span.yellow-text  {{{assumedGrade | gpaScale }}}
+          //- .row.center
+          //-   .col.s6
+          //-     .row
+          //-       .col.s6
+          //-         .p4 Assuming...
+          //-       .col.s6
+          //-         input#assume_value.center(v-model="assumedInput" placeholder="100%" type="text" style="margin-top: -1em;" @input="calcAssumed")
+          //-   .col.s6
+          //-     .p4 ...on remaining grade.
+          //- .row.center(style="margin-top: -1em;")
+            .col.s6: .p2 Projected Grade:
+            .col.s6: .yellow-text {{assumedGrade}}%
+        .divider
+        .section
+
+        .wrapper.center
+          .p2: h5 Detailed Breakdown
+          //- .section
+          //- .divider
+          .section
+          .breakdown
+            table.centered
+              thead
+                tr
+                  th Recieving
+                  th Grade
+              tbody
+                tr(v-for="val in breakdown")
+                  td
+                    span Recieving 
+                    b {{val}}% 
+                    span on remaining 
+                    b {{remainingWeight}}%:
+                  td
+                    b {{{calcBreakdown(val) | gpaScale}}}
+        .section
+
+      .divider
+
+
+    script(src="https://code.jquery.com/jquery-2.1.4.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.13/vue.min.js")
+    script(src="main.js")
